@@ -1,13 +1,30 @@
 <?php
 session_start();
 
-// Script de setup automatique de la base de données
-try {
-    require_once 'Access_BD/connexion.php';
-    setupDatabase();
-} catch (Exception $e) {
-    $db_error = $e->getMessage();
+// Initialisation automatique de la base de données au premier accès
+function initializeDatabaseOnFirstAccess() {
+    try {
+        require_once 'Access_BD/connexion.php';
+        
+        $database = new Database();
+        $conn = $database->connect();
+        
+        // Vérifier si la base existe
+        $result = $conn->query("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'gestion_ecole'");
+        if ($result->num_rows == 0) {
+            // Base n'existe pas, la créer
+            $database->initializeDatabase();
+            error_log("✅ Base de données créée automatiquement au premier accès");
+        }
+        
+        $database->close();
+    } catch (Exception $e) {
+        error_log("❌ Erreur initialisation BD: " . $e->getMessage());
+    }
 }
+
+// Appeler l'initialisation
+initializeDatabaseOnFirstAccess();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
