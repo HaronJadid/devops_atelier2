@@ -2,7 +2,7 @@ name: Mon CI # Nom du workflow (il apparaîtra dans l’onglet "Actions" sur Git
 # Déclenchement automatique du workflow
 on:
   push: # L'événement qui déclenche le workflow
-    branches: [ main, feature-readme ] # Le workflow s'exécute sur ces deux branches
+    branches: [ main, feature-readme , feature-test] # Le workflow s'exécute sur ces deux branches
 # Définition des tâches à exécuter (jobs)
 jobs:
   Construction: # Nom du job (Build)
